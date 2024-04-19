@@ -10,7 +10,7 @@ export function cooldown() {
 	timerDiv.classList.remove("disabled");
 	let interval = setInterval(() => {
 		timer--;
-		timerDiv.innerText = `00:${timer}`;
+		timerDiv.innerText = `00:0${timer}`;
 		if (timer <= 0) {
 			timerDiv.classList.add("disabled");
 			clearInterval(interval);
