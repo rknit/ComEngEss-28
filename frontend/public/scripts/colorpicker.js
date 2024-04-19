@@ -2,8 +2,13 @@ const colorButton = document.getElementById('color-button');
 const colorOptions = document.getElementById('color-options');
 
 // Set color 
-let team = localStorage.getItem("team");
-colorButton.style.backgroundColor = team;
+
+const teamColor = {
+    "red" : "#ff0000",
+    "green" : "#0B6E4F",
+    "blue" : "#0972C4",
+    "yellow" : "#e5de00",
+}
 
 const allColor = {
     "red" : [ 
@@ -52,6 +57,8 @@ const allColor = {
     ]
 };
 
+let team = localStorage.getItem("team");
+colorButton.style.backgroundColor = teamColor[team];
 
 function createColorPopup() {
     const colorPalette = document.getElementById("color-options");

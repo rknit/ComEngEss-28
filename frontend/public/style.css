@@ -33,7 +33,7 @@ body {
 
 .red:hover { background-color: rgb(170, 26, 26); color : white;}
 .blue:hover { background-color: #175f96; color :white;}
-.green:hover { background-color: #0e6147(11, 90, 11); color : white;}
+.green:hover { background-color: #134c3a; color : white;}
 .yellow:hover { background-color: #cac40a; color : white;}
 
 .content {
@@ -60,7 +60,7 @@ body {
   }
 
   .red { background-color: red; top: 25%; left: 5%;}
-  .blue { background-color: blue; top: 40%; left: 5%;}
-  .green { background-color: green; top: 55%; left: 5%}
-  .yellow { background-color: yellow; top: 70%; left: 5%}
+  .blue { background-color: #0972C4; top: 40%; left: 5%;}
+  .green { background-color: #0B6E4F; top: 55%; left: 5%}
+  .yellow { background-color: #e5de00; top: 70%; left: 5%}
 }
