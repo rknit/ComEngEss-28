@@ -1,8 +1,8 @@
 body {
   margin: 0;
-  padding: 20px; /* Add padding to all sides */
+  padding: 20px;
   height: calc(100vh - 40px);
-  overflow: hidden; /* Hide overflow to prevent scrolling */
+  overflow: hidden;
   position: relative;
   background-image: url('./images/background.png');
   background-repeat: no-repeat;
@@ -11,18 +11,38 @@ body {
 }
 
 .circle {
-  width: 20%; /* Set circle width as percentage */
-  padding-bottom: 20%;  /*Set circle height as percentage */
+  width: 20%; 
+  padding-bottom: 20%;
   border-radius: 50%;
   position: absolute;
+  transition: 0.3s;
+  /* text-align: center; 
+  vertical-align: middle; */
 }
 
-.red { background-color: red; top: 10%; left: 10%; }
-.blue { background-color: blue; bottom: 10%; left: 10%; }
-.green { background-color: green; top: 10%; right: 10%; }
-.yellow { background-color: yellow; bottom: 10%; right: 10%; }
+.circle h3{
+  position:absolute;
+  top:50%; left:50%;
+  transform: translate(-50%, -50%);
+  margin:0;
+}
+
+/* .circle:hover {
+  background-color: rgb(218, 35, 35);
+} */
+
+.red { background-color: red; top: 10%; left: 10%; color: red;}
+.blue { background-color: blue; bottom: 10%; left: 10%; color: blue;}
+.green { background-color: green; top: 10%; right: 10%; color: green;}
+.yellow { background-color: yellow; bottom: 10%; right: 10%; color: yellow;}
+
+.red:hover { background-color: rgb(170, 26, 26); color : white;}
+.blue:hover { background-color: rgb(16, 16, 161); color : white;}
+.green:hover { background-color: rgb(11, 90, 11); color : white;}
+.yellow:hover { background-color: rgb(197, 197, 25); color : white;}
 
 .content {
+  padding: 1%;
   margin: 0;
   position: absolute;
   top: 50%;
@@ -32,13 +52,10 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* Adjust circle size for smaller screens */
   .circle {
     width: 90vw;
     height: 0px;
     border-radius: 10px;
-    /* position: relative; */
-    /* display: flex; */
   }
   
   .content {
