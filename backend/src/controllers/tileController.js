@@ -21,14 +21,15 @@ export const createTile = async (req, res) => {
     if (previousTile.length !== 0) {
       if (previousTile[0].color === newTile.color) {
         res.status(200).json({ message: "No updated, the same color is placed at the same spot" });
-      }
+      } else {
 
-      const previousColor = previousTile[0].color;
-      await Tile.updateOne({$and: [{ x }, { y }]}, { color });
-      await Leaderboard.updateOne({ $and: [{color: previousColor}, {count: { $gte : 1 }}] }, { $inc: { count: -1 }});
-      await Leaderboard.updateOne({ color }, { $inc: { count: 1 }});
-      res.status(200).json({ message: "Updated existing Tile and Leaderboard success" });
-    
+        const previousColor = previousTile[0].color;
+        await Tile.updateOne({$and: [{ x }, { y }]}, { color });
+        await Leaderboard.updateOne({ $and: [{color: previousColor}, {count: { $gte : 1 }}] }, { $inc: { count: -1 }});
+        await Leaderboard.updateOne({ color }, { $inc: { count: 1 }});
+        res.status(200).json({ message: "Updated existing Tile and Leaderboard success" });
+
+      }
     } else {
     
       await newTile.save();
@@ -60,6 +61,34 @@ export const filterTile = async (req, res) => {
   const tile = await Tile.find({$and: [{ x }, { y }]});
 
   res.status(200).json(tile);
+};
+
+export const initialize = async (req, res) => {
+
+  try {
+    const operations = []
+    const startTime = new Date();
+    for (let i = 0; i < 256; i++) {
+      for (let j = 0; j < 256; j++) {
+
+        operations.push({
+          updateOne: {
+            filter: { x: i, y: j },
+            update: { $setOnInsert: { x: i, y: j, color: "nocolor" } },
+            upsert: true
+          }
+        });
+
+      }
+    }
+    await Tile.bulkWrite(operations, { ordered: false });
+    const finishTime = new Date();
+    console.log((finishTime - startTime) / 1000);
+    res.status(200).json({ message: "Map initialization success" });  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error." });
+  }
 };
 
 
