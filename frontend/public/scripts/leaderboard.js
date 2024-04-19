@@ -1,3 +1,5 @@
+import { getLeaderboard } from "../../../backend/src/controllers/leaderboardController";
+
 // Sample leaderboard data
 const leaderboardData = [
     { name: "Red", score: 100 },
@@ -8,13 +10,12 @@ const leaderboardData = [
   
   // Function to populate leaderboard
   async function populateLeaderboard() {
-    const response = await fetch('http://localhost:3222/')
-    const leaderboardData = await response.json();
+    const response = getLeaderboard(); // get leaderboard from backend
     
     const leaderboardList = document.getElementById("leaderboard-list");
     leaderboardList.innerHTML = ""; // Clear existing list
     
-    leaderboardData.forEach((color, index) => {
+    response.forEach((color, index) => {
       const listItem = document.createElement("li");
       listItem.innerHTML = `<span>${index + 1}. ${color.name}</span><span>${color.score}</span>`;
       leaderboardList.appendChild(listItem);
@@ -23,4 +24,6 @@ const leaderboardData = [
   
   // Populate leaderboard on page load
   populateLeaderboard();
+
+  setInterval(populateLeaderboard,5000);
   
