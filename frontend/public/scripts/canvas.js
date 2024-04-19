@@ -4,7 +4,7 @@ const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
 const CANVAS_SIZE = 256;
-let cellSize = 40;
+let cellSize = 10;
 
 const colors = new Array(CANVAS_SIZE)
 	.fill(0)
@@ -39,14 +39,8 @@ function draw() {
 	context.canvas.height = window.innerHeight;
 	context.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-	let xLimit = Math.min(
-		CANVAS_SIZE * cellSize + posX,
-		window.innerWidth + cellSize
-	);
-	let yLimit = Math.min(
-		CANVAS_SIZE * cellSize + posY,
-		window.innerHeight + cellSize
-	);
+	let xLimit = Math.min(CANVAS_SIZE * cellSize + posX, window.innerWidth);
+	let yLimit = Math.min(CANVAS_SIZE * cellSize + posY, window.innerHeight);
 
 	for (let y = posY; y < yLimit; y += cellSize) {
 		for (let x = posX; x < xLimit; x += cellSize) {
@@ -92,9 +86,13 @@ function paint(x, y) {
 }
 
 window.addEventListener("resize", draw);
-window.addEventListener("load", draw);
+window.addEventListener("load", () => {
+	posX = window.innerWidth / 2 - (CANVAS_SIZE * cellSize) / 2;
+	posY = window.innerHeight / 2 - (CANVAS_SIZE * cellSize) / 2;
+	draw();
+});
 
-document.addEventListener("mousemove", (e) => {
+canvas.addEventListener("mousemove", (e) => {
 	if (dragging) {
 		let dx = e.clientX - dragX;
 		let dy = e.clientY - dragY;
@@ -106,7 +104,7 @@ document.addEventListener("mousemove", (e) => {
 		draw();
 	}
 });
-document.addEventListener("touchmove", (e) => {
+canvas.addEventListener("touchmove", (e) => {
 	if (dragging) {
 		let dx = e.clientX - dragX;
 		let dy = e.clientY - dragY;
@@ -119,14 +117,14 @@ document.addEventListener("touchmove", (e) => {
 	}
 });
 
-document.addEventListener("mousedown", (e) => {
+canvas.addEventListener("mousedown", (e) => {
 	dragging = true;
 	dragX = e.clientX;
 	dragY = e.clientY;
 
 	lastClick = Date.now();
 });
-document.addEventListener("touchstart", (e) => {
+canvas.addEventListener("touchstart", (e) => {
 	dragging = true;
 	dragX = e.clientX;
 	dragY = e.clientY;
@@ -134,20 +132,25 @@ document.addEventListener("touchstart", (e) => {
 	lastClick = Date.now();
 });
 
-document.addEventListener("mouseup", (e) => {
+canvas.addEventListener("mouseup", (e) => {
 	dragging = false;
 	let curTime = Date.now();
 	if (curTime - lastClick < 200) paint(e.clientX, e.clientY);
 });
-document.addEventListener("touchend", (e) => {
+canvas.addEventListener("touchend", (e) => {
 	dragging = false;
 	let curTime = Date.now();
 	if (curTime - lastClick < 200) paint(e.clientX, e.clientY);
 });
 
-document.addEventListener("wheel", (e) => {
+canvas.addEventListener("wheel", (e) => {
+	let prevCellSize = cellSize;
 	cellSize -= Math.sign(e.deltaY) * 3;
 	cellSize = Math.max(cellSize, 10);
 	cellSize = Math.min(cellSize, 100);
+
+	let moveBackDelta = (CANVAS_SIZE * (cellSize - prevCellSize)) / 2;
+	posX -= moveBackDelta;
+	posY -= moveBackDelta;
 	draw();
 });
