@@ -7,7 +7,10 @@ const leaderboardData = [
   ];
   
   // Function to populate leaderboard
-  function populateLeaderboard() {
+  async function populateLeaderboard() {
+    const response = await fetch('http://localhost:3222/')
+    const leaderboardData = await response.json();
+    
     const leaderboardList = document.getElementById("leaderboard-list");
     leaderboardList.innerHTML = ""; // Clear existing list
     
