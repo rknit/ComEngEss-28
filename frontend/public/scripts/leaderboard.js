@@ -19,7 +19,7 @@ const leaderboardData = [
     
     response.forEach((color, index) => {
       const listItem = document.createElement("li");
-      listItem.innerHTML = `<span>${index + 1}. ${color.color}</span><span>${color.count}</span>`;
+      listItem.innerHTML = `<span>${index + 1}. ${color.team}</span><span>${color.count}</span>`;
       leaderboardList.appendChild(listItem);
     });
   }

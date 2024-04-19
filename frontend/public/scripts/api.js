@@ -7,7 +7,7 @@ export async function getLeaderboard() {
     return leaderboard;
 }
 
-export async function getMap() {
+export async function getCanvas() {
     const canvas = await fetch(`${BACKEND_URL}/tiles/map-info`).then((r) => r.json());
  
     return canvas;
