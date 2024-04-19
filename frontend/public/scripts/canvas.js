@@ -1,4 +1,5 @@
 import { cooldown, isOnCooldown } from "./clickTimer.js";
+import { createTile } from "./api.js";
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -74,6 +75,10 @@ function paint(x, y) {
 		return;
 	colors[gridX][gridY] = document.getElementById('color-button').style.backgroundColor;
 	draw();
+
+	let team = localStorage.getItem("team");
+	createTile({ x: gridX, y: gridY, color: team });
+	
 	cooldown();
 }
 

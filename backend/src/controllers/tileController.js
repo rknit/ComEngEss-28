@@ -67,7 +67,7 @@ export const initialize = async (req, res) => {
 
   try {
     const operations = []
-    const startTime = new Date();
+    // const startTime = new Date();
     for (let i = 0; i < 256; i++) {
       for (let j = 0; j < 256; j++) {
 
@@ -82,8 +82,8 @@ export const initialize = async (req, res) => {
       }
     }
     await Tile.bulkWrite(operations, { ordered: false });
-    const finishTime = new Date();
-    console.log((finishTime - startTime) / 1000);
+    // const finishTime = new Date();
+    // console.log((finishTime - startTime) / 1000);
     res.status(200).json({ message: "Map initialization success" });  
   } catch (err) {
     console.log(err);
