@@ -6,7 +6,7 @@ let cellSize = 40;
 
 const colors = new Array(CANVAS_SIZE)
 	.fill(0)
-	.map(() => new Array(CANVAS_SIZE).fill("#FF00FF"));
+	.map(() => new Array(CANVAS_SIZE).fill("#FFFFFF"));
 
 let posX = 0;
 let posY = 0;
@@ -39,6 +39,7 @@ function draw() {
 
 			context.fillStyle = colors[gridX][gridY];
 			context.fillRect(Math.floor(x), Math.floor(y), cellSize, cellSize);
+			// context.fillStyle = "black";
 			// context.fillText(
 			// 	`${gridX},${gridY}`,
 			// 	Math.floor(x),
@@ -71,10 +72,7 @@ function paint(x, y) {
 }
 
 window.addEventListener("resize", draw);
-window.addEventListener("load", () => {
-	colors[0][1] = "#00FF00";
-	draw();
-});
+window.addEventListener("load", draw);
 
 document.addEventListener("mousemove", (e) => {
 	if (dragging) {
@@ -128,7 +126,7 @@ document.addEventListener("touchend", (e) => {
 });
 
 document.addEventListener("wheel", (e) => {
-	cellSize -= Math.sign(e.deltaY) * 5;
+	cellSize -= Math.sign(e.deltaY) * 3;
 	cellSize = Math.max(cellSize, 10);
 	cellSize = Math.min(cellSize, 100);
 	draw();
