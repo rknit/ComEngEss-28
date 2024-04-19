@@ -3,8 +3,38 @@ body, html {
     height: 100%;
     margin: 0;
     overflow: hidden;
+    font-family: Roboto, sans-serif;
 }
 
 #canvas-container {
     background: #fff;
 }
+  
+  #leaderboard {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  #leaderboard h2 {
+    margin: 0 0 10px;
+  }
+  
+  #leaderboard-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #leaderboard-list li {
+    margin-bottom: 5px;
+  }
+  
+  #leaderboard-list li span {
+    display: inline-block;
+    width: 100px;
+  }
+  
