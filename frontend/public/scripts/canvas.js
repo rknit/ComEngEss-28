@@ -51,4 +51,7 @@ document.addEventListener("mousedown", (e) => {
 	dragY = e.clientY;
 });
 document.addEventListener("mouseup", () => (dragging = false));
-document.addEventListener("wheel", (e) => {});
+document.addEventListener("wheel", (e) => {
+	cellSize += e.deltaY * 0.01;
+	draw();
+});
