@@ -4,12 +4,14 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>CanvasWar</title>
-		<link rel="icon" type="image/png" href="./images/favicon.png">
+		<link rel="icon" type="image/png" href="./images/favicon.png" />
 		<link rel="stylesheet" href="game.css" />
 		<script src="scripts/canvas.js" type="module"></script>
 		<script src="scripts/leaderboard.js" type="module"></script>
 	</head>
 	<body>
+		<div id="cooldown-timer" class="disabled">MM:SS</div>
+
 		<div id="canvas-container">
 			<canvas id="canvas"></canvas>
 		</div>
@@ -17,8 +19,8 @@
 		<div id="leaderboard">
 			<h2>Leaderboard</h2>
 			<ul id="leaderboard-list">
-			  <!-- Leaderboard items will be dynamically added here -->
+				<!-- Leaderboard items will be dynamically added here -->
 			</ul>
-		  </div>
+		</div>
 	</body>
 </html>

@@ -1,3 +1,5 @@
+import { cooldown, isOnCooldown } from "./clickTimer.js";
+
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
@@ -9,11 +11,11 @@ const colors = new Array(CANVAS_SIZE)
 	.map(() => new Array(CANVAS_SIZE).fill("#FFFFFF"));
 
 const colorStringToValue = new Map([
-	['red', convertRgbToHex(255, 0, 0)],
-	['blue', convertRgbToHex(0, 0, 255)],
-	['green', convertRgbToHex(0, 128, 0)],
-	['yellow', convertRgbToHex(255, 255, 0)]
-])
+	["red", convertRgbToHex(255, 0, 0)],
+	["blue", convertRgbToHex(0, 0, 255)],
+	["green", convertRgbToHex(0, 128, 0)],
+	["yellow", convertRgbToHex(255, 255, 0)],
+]);
 const color = colorStringToValue.get(localStorage.getItem("team"));
 
 let posX = 0;
@@ -25,8 +27,11 @@ let dragY = 0;
 
 let lastClick = Date.now();
 
-function convertRgbToHex (red, green, blue) {
-	return "#" + (1 << 24 | red << 16 | green << 8 | blue).toString(16).slice(1);
+function convertRgbToHex(red, green, blue) {
+	return (
+		"#" +
+		((1 << 24) | (red << 16) | (green << 8) | blue).toString(16).slice(1)
+	);
 }
 
 function draw() {
@@ -75,12 +80,15 @@ function draw() {
 }
 
 function paint(x, y) {
+	if (isOnCooldown()) return;
+
 	let gridX = Math.floor((x - posX) / cellSize);
 	let gridY = Math.floor((y - posY) / cellSize);
 	if (gridX < 0 || gridY < 0 || gridX >= CANVAS_SIZE || gridY >= CANVAS_SIZE)
 		return;
 	colors[gridX][gridY] = color;
 	draw();
+	cooldown();
 }
 
 window.addEventListener("resize", draw);
