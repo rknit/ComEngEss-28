@@ -3,35 +3,52 @@ const context = canvas.getContext("2d");
 
 const CANVAS_SIZE = 256;
 let cellSize = 40;
-const GRID_OPACITY = 0.15;
+let scale = 1;
 
-window.addEventListener("resize", draw, false);
-window.onload = draw;
+let dragging = false;
+let posX = 0;
+let posY = 0;
+let dragX = 0;
+let dragY = 0;
 
-export function draw() {
-	let size = CANVAS_SIZE * cellSize;
+function draw() {
+	context.canvas.width = window.innerWidth;
+	context.canvas.height = window.innerHeight;
+	context.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-	context.canvas.width = size;
-	context.canvas.height = size;
-
-	for (let v = 0; v <= size; v += cellSize) {
-		context.moveTo(0.5 + v, 0);
-		context.lineTo(0.5 + v, size);
+	let vLimit = Math.min(CANVAS_SIZE * cellSize - posX, window.innerWidth);
+	for (let v = posX; v <= vLimit; v += cellSize) {
+		context.moveTo(v, 0);
+		context.lineTo(v, window.innerHeight);
 	}
 
-	for (let h = 0; h <= size; h += cellSize) {
-		context.moveTo(0, 0.5 + h);
-		context.lineTo(size, 0.5 + h);
+	let hLimit = Math.min(CANVAS_SIZE * cellSize - posY, window.innerHeight);
+	for (let h = posY; h <= hLimit; h += cellSize) {
+		context.moveTo(0, h);
+		context.lineTo(window.innerWidth, h);
 	}
 
-	context.strokeStyle = `rgba(0, 0, 0, ${GRID_OPACITY})`;
+	context.strokeStyle = "#d9d9d9";
 	context.stroke();
 }
 
-export function setCellSize(cellSize_) {
-	cellSize = cellSize_;
-}
+window.addEventListener("resize", draw);
+window.addEventListener("load", draw);
+document.addEventListener("mousemove", (e) => {
+	if (dragging) {
+		let dx = e.clientX - dragX;
+		let dy = e.clientY - dragY;
+		dragX = e.clientX;
+		dragY = e.clientY;
 
-export function getCellSize() {
-	return cellSize;
-}
+		posX += dx;
+		posY += dy;
+		draw();
+	}
+});
+document.addEventListener("mousedown", (e) => {
+	dragging = true;
+	dragX = e.clientX;
+	dragY = e.clientY;
+});
+document.addEventListener("mouseup", () => (dragging = false));
