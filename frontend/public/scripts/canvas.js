@@ -66,6 +66,24 @@ function draw() {
 	context.stroke();
 }
 
+async function  paintFromDatabase() {
+	const response = await getCanvas();
+
+	response.forEach((color,x,y) => {
+		let gridX = Math.floor((x - posX) / cellSize);
+		let gridY = Math.floor((y - posY) / cellSize);
+		if (gridX < 0 || gridY < 0 || gridX >= CANVAS_SIZE || gridY >= CANVAS_SIZE)
+			return;
+		colors[gridX][gridY] = color;
+		draw();
+	});
+
+}
+
+paintFromDatabase();
+
+setInterval(paintFromDatabase,1000)
+
 function paint(x, y) {
 	if (isOnCooldown()) return;
 
