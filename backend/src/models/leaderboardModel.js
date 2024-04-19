@@ -11,7 +11,7 @@ Example:
 */
 
 const leaderboardSchema = new mongoose.Schema({
-  color: {
+  team: {
     type: String,
     required: true,
   },

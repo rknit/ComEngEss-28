@@ -3,37 +3,35 @@ import Leaderboard from "../models/leaderboardModel.js";
 
 export const createTile = async (req, res) => {
   try {
-    const newTile = new Tile(req.body);
-
-    // get previous color tile
-    const { x, y, color } = req.body; 
-    const previousTile = await Tile.find({$and: [{ x }, { y }]});
-    const previousLeaderboardColor = await Leaderboard.find({ color });
+    const { x, y, color, team } = req.body; 
+    const previousTile = await Tile.findOne({$and: [{ x }, { y }]});
+    const previousLeaderboard = await Leaderboard.findOne({ team });
 
     // create new leaderboard with specified color field if it doesn't exist
-    if (previousLeaderboardColor.length === 0) {
-      const newLeaderboard = new Leaderboard({ color, count: 0 });
+    if (!previousLeaderboard) {
+      const newLeaderboard = new Leaderboard({ team, count: 0 });
       await newLeaderboard.save();
     }
 
     // no update if place the tile with the same color at the same spot
     // otherwise update the database Tile and Leaderboard
-    if (previousTile.length !== 0) {
-      if (previousTile[0].color === newTile.color) {
+    if (previousTile) {
+      if (previousTile.color === color) {
         res.status(200).json({ message: "No updated, the same color is placed at the same spot" });
       } else {
 
-        const previousColor = previousTile[0].color;
         await Tile.updateOne({$and: [{ x }, { y }]}, { color });
-        await Leaderboard.updateOne({ $and: [{color: previousColor}, {count: { $gte : 1 }}] }, { $inc: { count: -1 }});
-        await Leaderboard.updateOne({ color }, { $inc: { count: 1 }});
+        await Tile.updateOne({$and: [{ x }, { y }]}, { team });
+        await Leaderboard.updateOne({ $and: [{team: previousTile.team}, {count: { $gte : 1 }}] }, { $inc: { count: -1 }});
+        await Leaderboard.updateOne({ team }, { $inc: { count: 1 }});
         res.status(200).json({ message: "Updated existing Tile and Leaderboard success" });
 
       }
     } else {
     
+      const newTile = new Tile(req.body);
       await newTile.save();
-      await Leaderboard.updateOne({ color }, { $inc: { count: 1 }});
+      await Leaderboard.updateOne({ team }, { $inc: { count: 1 }});
 
       res.status(200).json({ message: "Updated new Tile and Leaderboard success" });    
     }

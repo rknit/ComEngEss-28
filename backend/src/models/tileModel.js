@@ -22,6 +22,10 @@ const tileSchema = new mongoose.Schema({
   color: {
     type: String,
     required: true,
+  },
+  team: {
+    type: String,
+    required: true
   }
 },
 {
