@@ -1,10 +1,11 @@
 body {
+  font-family: Roboto, sans-serif;
   margin: 0;
   padding: 20px;
   height: calc(100vh - 40px);
   overflow: hidden;
   position: relative;
-  background-image: url('./images/background.png');
+  background-image: url('./images/LowerBrightnessBackground.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
@@ -16,8 +17,6 @@ body {
   border-radius: 50%;
   position: absolute;
   transition: 0.3s;
-  /* text-align: center; 
-  vertical-align: middle; */
 }
 
 .circle h3{
@@ -26,10 +25,6 @@ body {
   transform: translate(-50%, -50%);
   margin:0;
 }
-
-/* .circle:hover {
-  background-color: rgb(218, 35, 35);
-} */
 
 .red { background-color: red; top: 10%; left: 10%; color: red;}
 .blue { background-color: blue; bottom: 10%; left: 10%; color: blue;}
@@ -54,7 +49,8 @@ body {
 @media (max-width: 768px) {
   .circle {
     width: 90vw;
-    height: 0px;
+    height: 13%;
+    padding-bottom: 0px;
     border-radius: 10px;
   }
   
