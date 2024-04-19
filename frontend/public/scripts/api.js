@@ -2,6 +2,7 @@ import { BACKEND_URL } from "./config.js";
 
 export async function getLeaderboard() {
     const leaderboard = await fetch(`${BACKEND_URL}/leaderboard`).then((r) => r.json());
+    console.log(leaderboard);
 
     return leaderboard;
 }

@@ -1,4 +1,4 @@
-import { getLeaderboard } from "../../../backend/src/controllers/leaderboardController";
+import { getLeaderboard } from "./api.js";
 
 // Sample leaderboard data
 const leaderboardData = [
@@ -10,14 +10,16 @@ const leaderboardData = [
   
   // Function to populate leaderboard
   async function populateLeaderboard() {
-    const response = getLeaderboard(); // get leaderboard from backend
+    const response = await getLeaderboard(); // get leaderboard from backend
     
     const leaderboardList = document.getElementById("leaderboard-list");
     leaderboardList.innerHTML = ""; // Clear existing list
+
+    response.sort((a, b) => b.count - a.count);
     
     response.forEach((color, index) => {
       const listItem = document.createElement("li");
-      listItem.innerHTML = `<span>${index + 1}. ${color.name}</span><span>${color.score}</span>`;
+      listItem.innerHTML = `<span>${index + 1}. ${color.color}</span><span>${color.count}</span>`;
       leaderboardList.appendChild(listItem);
     });
   }
@@ -25,5 +27,5 @@ const leaderboardData = [
   // Populate leaderboard on page load
   populateLeaderboard();
 
-  setInterval(populateLeaderboard,5000);
+  setInterval(populateLeaderboard,2000);
   
