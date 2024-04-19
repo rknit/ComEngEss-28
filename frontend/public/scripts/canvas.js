@@ -101,18 +101,18 @@ canvas.addEventListener("mousemove", (e) => {
 
 		posX += dx;
 		posY += dy;
-		draw();
-	}
-});
-canvas.addEventListener("touchmove", (e) => {
-	if (dragging) {
-		let dx = e.clientX - dragX;
-		let dy = e.clientY - dragY;
-		dragX = e.clientX;
-		dragY = e.clientY;
 
-		posX += dx;
-		posY += dy;
+		console.log(posX + " " + posY);
+		posX = Math.min(4 * cellSize, posX);
+		posX = Math.max(
+			-CANVAS_SIZE * cellSize + window.innerWidth - 4 * cellSize,
+			posX
+		);
+		posY = Math.min(4 * cellSize, posY);
+		posY = Math.max(
+			-CANVAS_SIZE * cellSize + window.innerHeight - 4 * cellSize,
+			posY
+		);
 		draw();
 	}
 });
@@ -124,20 +124,8 @@ canvas.addEventListener("mousedown", (e) => {
 
 	lastClick = Date.now();
 });
-canvas.addEventListener("touchstart", (e) => {
-	dragging = true;
-	dragX = e.clientX;
-	dragY = e.clientY;
-
-	lastClick = Date.now();
-});
 
 canvas.addEventListener("mouseup", (e) => {
-	dragging = false;
-	let curTime = Date.now();
-	if (curTime - lastClick < 200) paint(e.clientX, e.clientY);
-});
-canvas.addEventListener("touchend", (e) => {
 	dragging = false;
 	let curTime = Date.now();
 	if (curTime - lastClick < 200) paint(e.clientX, e.clientY);
