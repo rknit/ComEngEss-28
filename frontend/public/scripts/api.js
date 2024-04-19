@@ -24,7 +24,7 @@ export async function getTile(x, y) {
     return tile;
 }
 
-export async function createTiles(item) {
+export async function createTile(item) {
     const tile = await fetch(`${BACKEND_URL}/tiles`, {
       method: "POST",
       headers: {
@@ -33,5 +33,5 @@ export async function createTiles(item) {
       body: JSON.stringify(item),
     });
 
-    return tile
+    return tile;
 }
