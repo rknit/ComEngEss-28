@@ -1,6 +1,73 @@
 const colorButton = document.getElementById('color-button');
 const colorOptions = document.getElementById('color-options');
-const colorOptionItems = document.querySelectorAll('.color-option');
+
+// Set color 
+let team = localStorage.getItem("team");
+colorButton.style.backgroundColor = team;
+
+const allColor = {
+    "red" : [ 
+         "#ffbaba" ,
+         "#ff7b7b" ,
+         "#ff5252" ,
+         "#ff0000" ,
+         "#a70000" ,
+         "#c30101" ,
+         "#940000" ,
+         "#6f0000" ,
+         "#5c1010" ,
+    ],
+    "green" : [       
+         "#21D375" ,
+         "#6BBF59" ,
+         "#08A045" ,
+         "#0B6E4F" ,
+         "#073B3A" ,
+         "#0A5C36" ,
+         "#0F5132" ,
+         "#14452F" ,
+         "#18392B" ,
+    ],
+    "blue" : [  
+         "#1BCBF2" ,
+         "#0FB2F2" ,
+         "#139DF2" ,
+         "#0972C4" ,
+         "#11538C" ,
+         "#06508A" ,
+         "#053E6B" ,
+         "#04355C" ,
+         "#032642" ,
+    ],
+    "yellow" : [  
+         "#f1ee8e" ,
+         "#ece75f" ,
+         "#e8e337" ,
+         "#e5de00" ,
+         "#e6cc00" ,
+         "#e6b400" ,
+         "#e69b00" ,
+         "#d29e00" ,
+         "#b78700" ,
+    ]
+};
+
+
+function createColorPopup() {
+    const colorPalette = document.getElementById("color-options");
+    colorPalette.innerHTML = ""; // Clear existing list
+    
+    allColor[team].forEach((color, index) => {
+      const colorItem = document.createElement("div");
+      colorItem.classList.add("color-option");
+      colorItem.style.backgroundColor = `${color}`;
+      colorPalette.appendChild(colorItem);
+    });
+  }
+  
+  // Populate leaderboard on page load
+  createColorPopup();
+  const colorOptionItems = document.querySelectorAll('.color-option');
 
 // Function to show color options
 function showColorOptions() {
