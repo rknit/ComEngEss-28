@@ -9,15 +9,7 @@ let cellSize = 10;
 const colors = new Array(CANVAS_SIZE)
 	.fill(0)
 	.map(() => new Array(CANVAS_SIZE).fill("#FFFFFF"));
-
-const colorStringToValue = new Map([
-	["red", convertRgbToHex(255, 0, 0)],
-	["blue", convertRgbToHex(0, 0, 255)],
-	["green", convertRgbToHex(0, 128, 0)],
-	["yellow", convertRgbToHex(255, 255, 0)],
-]);
-const color = colorStringToValue.get(localStorage.getItem("team"));
-
+	
 let posX = 0;
 let posY = 0;
 
@@ -80,7 +72,7 @@ function paint(x, y) {
 	let gridY = Math.floor((y - posY) / cellSize);
 	if (gridX < 0 || gridY < 0 || gridX >= CANVAS_SIZE || gridY >= CANVAS_SIZE)
 		return;
-	colors[gridX][gridY] = color;
+	colors[gridX][gridY] = document.getElementById('color-button').style.backgroundColor;
 	draw();
 	cooldown();
 }
