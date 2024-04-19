@@ -8,14 +8,18 @@
   body {
     margin: 0;
     padding: 20px; /* Add padding to all sides */
-    height: calc(100vh - 40px); /* Adjust height considering padding */
+    height: calc(100vh - 40px);
     overflow: hidden; /* Hide overflow to prevent scrolling */
     position: relative;
+    background-image: url('./images/background.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
   }
   
   .circle {
-    width: 30vh; /* Set circle width as percentage */
-    padding-bottom: 30vh; /* Set circle height as percentage */
+    width: 20%; /* Set circle width as percentage */
+    padding-bottom: 20%;  /*Set circle height as percentage */
     border-radius: 50%;
     position: absolute;
   }
@@ -26,44 +30,50 @@
   .yellow { background-color: yellow; bottom: 10%; right: 10%; }
 
   .content {
+    margin: 0;
     position: absolute;
     top: 50%;
     left: 50%;
+    -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    z-index: 1;
-    text-align: center;
   }
-
-  @media (max-width: 512px) {
+  @media (max-width: 768px) {
     /* Adjust circle size for smaller screens */
     .circle {
-      width: 15vh;
-      padding-bottom: 15vh;
+      width: 90vw;
+      height: 0px;
+      border-radius: 10px;
+      /* position: relative; */
+      /* display: flex; */
+    }
+    
+    .content {
+      top: 4%;
+      transform: translate(-50%, 0);
     }
 
-    .content {
-      position: absolute;
-      top: 40%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1;
-      text-align: center;
-    }
+  .red { background-color: red; top: 25%; left: 5%;}
+  .blue { background-color: blue; top: 40%; left: 5%;}
+  .green { background-color: green; top: 55%; left: 5%}
+  .yellow { background-color: yellow; top: 70%; left: 5%}
   }
+
 
 
 </style>
 </head>
 <body>
-  <div class="circle red"></div>
-  <div class="circle blue"></div>
-  <div class="circle green"></div>
-  <div class="circle yellow"></div>
-  <div class="content">
-    <h1>Centered Text</h1>
-    <p>This is the text in the middle of the screen.</p>
+  <div class = "flex">
+    <div class="circle red"></div>
+    <div class="circle blue"></div>
+    <div class="circle green"></div>
+    <div class="circle yellow"></div>
+    <div class="content">
+      <h1>Centered Text</h1>
+      <p>This is the text in the middle of the screen.</p>
+    </div>
   </div>
-  <label for="colorpicker">Color Picker:</label>
-   <input type="color" id="colorpicker" value="#0000ff">
+  <!-- <label for="colorpicker">Color Picker:</label>
+   <input type="color" id="colorpicker" value="#0000ff"> -->
 </body>
 </html>
