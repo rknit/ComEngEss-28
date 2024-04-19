@@ -3,7 +3,6 @@ const context = canvas.getContext("2d");
 
 const CANVAS_SIZE = 256;
 let cellSize = 40;
-let scale = 1;
 
 let dragging = false;
 let posX = 0;
@@ -16,13 +15,13 @@ function draw() {
 	context.canvas.height = window.innerHeight;
 	context.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-	let vLimit = Math.min(CANVAS_SIZE * cellSize - posX, window.innerWidth);
+	let vLimit = Math.min(CANVAS_SIZE * cellSize + posX, window.innerWidth);
 	for (let v = posX; v <= vLimit; v += cellSize) {
 		context.moveTo(v, 0);
 		context.lineTo(v, window.innerHeight);
 	}
 
-	let hLimit = Math.min(CANVAS_SIZE * cellSize - posY, window.innerHeight);
+	let hLimit = Math.min(CANVAS_SIZE * cellSize + posY, window.innerHeight);
 	for (let h = posY; h <= hLimit; h += cellSize) {
 		context.moveTo(0, h);
 		context.lineTo(window.innerWidth, h);
@@ -52,3 +51,4 @@ document.addEventListener("mousedown", (e) => {
 	dragY = e.clientY;
 });
 document.addEventListener("mouseup", () => (dragging = false));
+document.addEventListener("wheel", (e) => {});
