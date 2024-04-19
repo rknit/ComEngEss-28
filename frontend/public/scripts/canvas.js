@@ -1,7 +1,7 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
-const CANVAS_SIZE = 10;
+const CANVAS_SIZE = 256;
 let cellSize = 40;
 
 const colors = new Array(CANVAS_SIZE)
@@ -36,25 +36,25 @@ function draw() {
 			let gridX = Math.floor((x - posX) / cellSize);
 			let gridY = Math.floor((y - posY) / cellSize);
 			if (gridX < 0 || gridY < 0) continue;
-			//console.log(gridX + " " + gridY);
+
 			context.fillStyle = colors[gridX][gridY];
 			context.fillRect(Math.floor(x), Math.floor(y), cellSize, cellSize);
-			context.fillText(
-				`${gridX},${gridY}`,
-				Math.floor(x),
-				Math.floor(y),
-				cellSize
-			);
+			// context.fillText(
+			// 	`${gridX},${gridY}`,
+			// 	Math.floor(x),
+			// 	Math.floor(y),
+			// 	cellSize
+			// );
 		}
 	}
 
 	for (let x = posX; x <= xLimit; x += cellSize) {
-		context.moveTo(x, 0);
-		context.lineTo(x, window.innerHeight);
+		context.moveTo(x, posY);
+		context.lineTo(x, yLimit);
 	}
 	for (let y = posY; y <= yLimit; y += cellSize) {
-		context.moveTo(0, y);
-		context.lineTo(window.innerWidth, y);
+		context.moveTo(posX, y);
+		context.lineTo(xLimit, y);
 	}
 
 	context.strokeStyle = "#d9d9d9";
@@ -75,6 +75,7 @@ window.addEventListener("load", () => {
 	colors[0][1] = "#00FF00";
 	draw();
 });
+
 document.addEventListener("mousemove", (e) => {
 	if (dragging) {
 		let dx = e.clientX - dragX;
@@ -87,6 +88,19 @@ document.addEventListener("mousemove", (e) => {
 		draw();
 	}
 });
+document.addEventListener("touchmove", (e) => {
+	if (dragging) {
+		let dx = e.clientX - dragX;
+		let dy = e.clientY - dragY;
+		dragX = e.clientX;
+		dragY = e.clientY;
+
+		posX += dx;
+		posY += dy;
+		draw();
+	}
+});
+
 document.addEventListener("mousedown", (e) => {
 	dragging = true;
 	dragX = e.clientX;
@@ -94,12 +108,25 @@ document.addEventListener("mousedown", (e) => {
 
 	lastClick = Date.now();
 });
+document.addEventListener("touchstart", (e) => {
+	dragging = true;
+	dragX = e.clientX;
+	dragY = e.clientY;
+
+	lastClick = Date.now();
+});
+
 document.addEventListener("mouseup", (e) => {
 	dragging = false;
 	let curTime = Date.now();
-	console.log(curTime - lastClick);
-	if (curTime - lastClick < 250) paint(e.clientX, e.clientY);
+	if (curTime - lastClick < 200) paint(e.clientX, e.clientY);
 });
+document.addEventListener("touchend", (e) => {
+	dragging = false;
+	let curTime = Date.now();
+	if (curTime - lastClick < 200) paint(e.clientX, e.clientY);
+});
+
 document.addEventListener("wheel", (e) => {
 	cellSize -= Math.sign(e.deltaY) * 5;
 	cellSize = Math.max(cellSize, 10);
