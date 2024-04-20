@@ -33,13 +33,11 @@ function draw() {
 	context.beginPath();
 	for (let y = posY; y < yLimit; y += cellSize) {
 		for (let x = posX; x < xLimit; x += cellSize) {
-			if (x < 0 || y < 0) continue;
-			if (x > window.innerWidth || y > window.innerHeight) continue;
-
 			let gridX = Math.floor((x - posX) / cellSize);
 			let gridY = Math.floor((y - posY) / cellSize);
-			if (gridX < 0 || gridY < 0 || colors[gridX][gridY] == "#FFFFFF")
-				continue;
+			if (gridX < 0 || gridY < 0) continue;
+			if (gridX >= CANVAS_SIZE || gridY >= CANVAS_SIZE) continue;
+			if (colors[gridX][gridY] == "#FFFFFF") continue;
 			context.fillStyle = colors[gridX][gridY];
 			context.fillRect(x, y, cellSize, cellSize);
 
