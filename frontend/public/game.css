@@ -17,10 +17,9 @@ body, html {
 #cooldown-timer {
   position: fixed;
   top: 20px;
-  right: 1px;
-  transform: translate(-50%, 0);
-  width: 8em;
-  height: 3em;
+  right: 20px;
+  width: 8rem;
+  height: 3rem;
   background-color: white;
   border: 4px solid #000820;
   border-radius: 48px;
@@ -29,6 +28,8 @@ body, html {
   justify-content: center;
   align-items: center;
   text-align: center;
+  font-weight: bold;
+  font-size: 1.25rem;
 
   user-select: none;
   -webkit-user-select: none;
@@ -69,8 +70,8 @@ body, html {
 
 #color-picker {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: 20px;
+    left: 20px;
     display: inline-block;
   }
   
