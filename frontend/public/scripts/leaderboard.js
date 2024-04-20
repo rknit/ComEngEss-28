@@ -27,5 +27,5 @@ const leaderboardData = [
   // Populate leaderboard on page load
   populateLeaderboard();
 
-  setInterval(populateLeaderboard,2000);
+  setInterval(populateLeaderboard,1000);
   

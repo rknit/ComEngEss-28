@@ -66,18 +66,14 @@ function draw() {
 	context.stroke();
 }
 
-async function  paintFromDatabase() {
+async function paintFromDatabase() {
 	const response = await getCanvas();
 
-	response.forEach((color,x,y) => {
-		let gridX = Math.floor((x - posX) / cellSize);
-		let gridY = Math.floor((y - posY) / cellSize);
-		if (gridX < 0 || gridY < 0 || gridX >= CANVAS_SIZE || gridY >= CANVAS_SIZE)
-			return;
-		colors[gridX][gridY] = color;
+	response.forEach((tile) => {
+		colors[tile.x][tile.y] = tile.color;
 		draw();
 	});
-
+	
 }
 
 paintFromDatabase();
@@ -92,9 +88,10 @@ function paint(x, y) {
 	if (gridX < 0 || gridY < 0 || gridX >= CANVAS_SIZE || gridY >= CANVAS_SIZE)
 		return;
 	colors[gridX][gridY] = document.getElementById('color-button').style.backgroundColor;
+	console.log(x, posX, gridX);
 	draw();
 
-	let team = localStorage.getItem("team");
+	const team = localStorage.getItem("team");
 	createTile({ x: gridX, y: gridY, color: colors[gridX][gridY], team });
 	
 	cooldown();
