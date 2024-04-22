@@ -3,12 +3,13 @@ import { createTile, getCanvas } from "./api.js";
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
+const pixCoordDiv = document.getElementById("pix-coord");
 
 const CANVAS_SIZE = 256;
 const MIN_CELL_SIZE = 10;
 const MAX_CELL_SIZE = 100;
 const ZOOM_SPEED = 3;
-const ENABLE_LINE_FADE = false;
+const ENABLE_LINE_FADE = true;
 const ENABLE_HOVER_BOX = true;
 
 const colors = new Array(CANVAS_SIZE)
@@ -17,7 +18,7 @@ const colors = new Array(CANVAS_SIZE)
 const queuedColors = new Map();
 
 let dragging = false;
-let cellSize = MIN_CELL_SIZE;
+let cellSize = Math.floor((MIN_CELL_SIZE + MAX_CELL_SIZE * 0.6) / 2);
 let posX = 0;
 let posY = 0;
 let hoverX = -1;
@@ -48,7 +49,7 @@ function draw() {
 				context.fillStyle = queuedColors.get(`${gridX},${gridY}`);
 			else if (colors[gridX][gridY] == "#FFFFFF") continue;
 			else context.fillStyle = colors[gridX][gridY];
-			context.fillRect(x, y, cellSize, cellSize);
+			context.fillRect(x - 0.5, y - 0.5, cellSize + 0.5, cellSize + 0.5);
 
 			// context.fillStyle = "black";
 			// context.fillText(
@@ -60,22 +61,35 @@ function draw() {
 		}
 	}
 
-	context.beginPath();
-	for (let x = startX; x <= xLimit; x += cellSize) {
-		context.moveTo(x - 0.5, startY);
-		context.lineTo(x - 0.5, yLimit);
+	if (!(ENABLE_LINE_FADE && cellSize == MIN_CELL_SIZE)) {
+		context.beginPath();
+		for (let x = startX; x <= xLimit; x += cellSize) {
+			context.moveTo(x - 0.5, startY - 0.5);
+			context.lineTo(x - 0.5, yLimit - 0.5);
+		}
+		for (let y = startY; y <= yLimit; y += cellSize) {
+			context.moveTo(startX - 0.5, y - 0.5);
+			context.lineTo(xLimit - 0.5, y - 0.5);
+		}
+		context.strokeStyle = "#d9d9d9";
+		if (ENABLE_LINE_FADE)
+			context.lineWidth =
+				Math.min(Math.pow(cellSize - 9.5, 2), MAX_CELL_SIZE) /
+				MAX_CELL_SIZE;
+		context.stroke();
 	}
-	for (let y = startY; y <= yLimit; y += cellSize) {
-		context.moveTo(startX, y - 0.5);
-		context.lineTo(xLimit, y - 0.5);
-	}
-	context.strokeStyle = "#d9d9d9";
-	if (ENABLE_LINE_FADE)
-		context.lineWidth = Math.sqrt((cellSize - 9.9) / MAX_CELL_SIZE);
-	context.stroke();
 
-	if (!ENABLE_HOVER_BOX || isMobile || hoverX < 0 || hoverY < 0) return;
-	if (hoverX >= CANVAS_SIZE || hoverY >= CANVAS_SIZE) return;
+	if (
+		!ENABLE_HOVER_BOX ||
+		isMobile ||
+		hoverX < 0 ||
+		hoverY < 0 ||
+		hoverX >= CANVAS_SIZE ||
+		hoverY >= CANVAS_SIZE
+	) {
+		pixCoordDiv.classList.add("disabled");
+		return;
+	}
 	let pixelX = hoverX * cellSize;
 	let pixelY = hoverY * cellSize;
 
@@ -84,6 +98,9 @@ function draw() {
 	context.strokeStyle = "gray";
 	context.lineWidth = (4 * cellSize) / MAX_CELL_SIZE;
 	context.stroke();
+
+	pixCoordDiv.classList.remove("disabled");
+	pixCoordDiv.innerText = `(${hoverX}, ${hoverY})`;
 }
 
 async function paintFromDatabase() {
