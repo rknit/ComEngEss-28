@@ -24,6 +24,7 @@ let hoverX = -1;
 let hoverY = -1;
 
 // mobiles
+let isMobile = false;
 let zooming = false;
 let lastTouchPosX = 0;
 let lastTouchPosY = 0;
@@ -73,7 +74,7 @@ function draw() {
 		context.lineWidth = Math.sqrt((cellSize - 9.9) / MAX_CELL_SIZE);
 	context.stroke();
 
-	if (!ENABLE_HOVER_BOX || hoverX < 0 || hoverY < 0) return;
+	if (!ENABLE_HOVER_BOX || isMobile || hoverX < 0 || hoverY < 0) return;
 	if (hoverX >= CANVAS_SIZE || hoverY >= CANVAS_SIZE) return;
 	let pixelX = hoverX * cellSize;
 	let pixelY = hoverY * cellSize;
@@ -90,7 +91,6 @@ async function paintFromDatabase() {
 	response.forEach((tile) => {
 		colors[tile.x][tile.y] = tile.color;
 	});
-	draw();
 }
 
 async function paint(x, y) {
@@ -127,7 +127,6 @@ window.addEventListener("resize", () => {
 	context.canvas.width = window.innerWidth;
 	context.canvas.height = window.innerHeight;
 	clampPos();
-	draw();
 });
 window.addEventListener("load", () => {
 	posX = window.innerWidth / 2 - (CANVAS_SIZE * cellSize) / 2;
@@ -137,6 +136,12 @@ window.addEventListener("load", () => {
 	clampPos();
 	paintFromDatabase();
 	setInterval(paintFromDatabase, 1000);
+
+	let drawLoop = () => {
+		draw();
+		window.requestAnimationFrame(drawLoop);
+	};
+	window.requestAnimationFrame(drawLoop);
 });
 
 window.addEventListener("mousedown", (e) => {
@@ -154,7 +159,6 @@ window.addEventListener("mousemove", (e) => {
 		posY += e.movementY;
 		clampPos();
 	}
-	window.requestAnimationFrame(draw);
 });
 window.addEventListener("mouseup", (e) => {
 	if (e.button !== 0) dragging = false;
@@ -171,10 +175,10 @@ window.addEventListener("wheel", (e) => {
 	posY -= gridY * (cellSize - prevCellSize);
 
 	clampPos();
-	window.requestAnimationFrame(draw);
 });
 
 window.addEventListener("touchstart", (e) => {
+	isMobile = true;
 	lastTouchPosX = e.touches[0].clientX;
 	lastTouchPosY = e.touches[0].clientY;
 	if (e.touches.length == 2) {
@@ -210,8 +214,12 @@ window.addEventListener("touchmove", (e) => {
 		lastTouchesDist = touchesDist;
 	}
 	clampPos();
-	window.requestAnimationFrame(draw);
 });
 window.addEventListener("touchend", (e) => {
-	if (e.touches.length == 2) zooming = false;
+	zooming = false;
 });
+
+// Debug only
+// window.onerror = (error, url, line) => {
+//     alert('ERR: '+ error +', URL: '+ url + ' L: ' +line);
+// };
