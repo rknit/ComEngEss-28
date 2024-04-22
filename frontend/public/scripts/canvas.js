@@ -30,6 +30,7 @@ let zooming = false;
 let lastTouchPosX = 0;
 let lastTouchPosY = 0;
 let lastTouchesDist = 0;
+let firstTouch = null;
 
 function draw() {
 	context.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -49,7 +50,7 @@ function draw() {
 				context.fillStyle = queuedColors.get(`${gridX},${gridY}`);
 			else if (colors[gridX][gridY] == "#FFFFFF") continue;
 			else context.fillStyle = colors[gridX][gridY];
-			context.fillRect(x - 0.5, y - 0.5, cellSize + 0.5, cellSize + 0.5);
+			context.fillRect(x, y, cellSize, cellSize);
 
 			// context.fillStyle = "black";
 			// context.fillText(
@@ -198,6 +199,7 @@ window.addEventListener("touchstart", (e) => {
 	isMobile = true;
 	lastTouchPosX = e.touches[0].clientX;
 	lastTouchPosY = e.touches[0].clientY;
+	firstTouch = e.touches[0].identifier;
 	if (e.touches.length == 2) {
 		zooming = true;
 		lastTouchesDist = Math.hypot(
@@ -207,17 +209,23 @@ window.addEventListener("touchstart", (e) => {
 	}
 });
 window.addEventListener("touchmove", (e) => {
-	posX += e.touches[0].clientX - lastTouchPosX;
-	posY += e.touches[0].clientY - lastTouchPosY;
-	lastTouchPosX = e.touches[0].clientX;
-	lastTouchPosY = e.touches[0].clientY;
+	for (let touch of e.touches) {
+		if (touch.identifier !== firstTouch) continue;
+		posX += touch.clientX - lastTouchPosX;
+		posY += touch.clientY - lastTouchPosY;
+		lastTouchPosX = touch.clientX;
+		lastTouchPosY = touch.clientY;
+		break;
+	}
 	if (zooming) {
 		let touchesDist = Math.hypot(
 			e.touches[0].clientX - e.touches[1].clientX,
 			e.touches[0].clientY - e.touches[1].clientY
 		);
 		let prevCellSize = cellSize;
-		cellSize += Math.sign(touchesDist - lastTouchesDist) * ZOOM_SPEED;
+		cellSize +=
+			Math.sign(touchesDist - lastTouchesDist) *
+			Math.floor(ZOOM_SPEED * 0.7);
 		cellSize = Math.max(cellSize, MIN_CELL_SIZE);
 		cellSize = Math.min(cellSize, MAX_CELL_SIZE);
 
