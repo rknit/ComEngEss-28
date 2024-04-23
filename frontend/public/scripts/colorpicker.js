@@ -72,7 +72,7 @@ function createColorPopup() {
     });
   }
   
-  // Populate leaderboard on page load
+
   createColorPopup();
   const colorOptionItems = document.querySelectorAll('.color-option');
 
