@@ -181,19 +181,25 @@ window.addEventListener("mousemove", (e) => {
 window.addEventListener("mouseup", (e) => {
 	if (e.button !== 0) dragging = false;
 });
-window.addEventListener("wheel", (e) => {
-	let prevCellSize = cellSize;
-	cellSize -= Math.sign(e.deltaY) * ZOOM_SPEED;
-	cellSize = Math.max(cellSize, MIN_CELL_SIZE);
-	cellSize = Math.min(cellSize, MAX_CELL_SIZE);
+window.addEventListener(
+	"wheel",
+	(e) => {
+		e.preventDefault();
 
-	let gridX = Math.floor((e.clientX - posX) / prevCellSize) + 1;
-	let gridY = Math.floor((e.clientY - posY) / prevCellSize) + 1;
-	posX -= gridX * (cellSize - prevCellSize);
-	posY -= gridY * (cellSize - prevCellSize);
+		let prevCellSize = cellSize;
+		cellSize -= Math.sign(e.deltaY) * ZOOM_SPEED;
+		cellSize = Math.max(cellSize, MIN_CELL_SIZE);
+		cellSize = Math.min(cellSize, MAX_CELL_SIZE);
 
-	clampPos();
-});
+		let gridX = Math.floor((e.clientX - posX) / prevCellSize) + 1;
+		let gridY = Math.floor((e.clientY - posY) / prevCellSize) + 1;
+		posX -= gridX * (cellSize - prevCellSize);
+		posY -= gridY * (cellSize - prevCellSize);
+
+		clampPos();
+	},
+	{ passive: false }
+);
 
 window.addEventListener("touchstart", (e) => {
 	isMobile = true;
