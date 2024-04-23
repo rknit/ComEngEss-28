@@ -20,9 +20,9 @@ export const createTile = async (req, res) => {
         res.status(200).json({ message: "No updated, the same color is placed at the same spot" });
       } else {
 
-        await Tile.updateOne({$and: [{ x }, { y }]}, { color });
-        await Tile.updateOne({$and: [{ x }, { y }]}, { team });
-        await Leaderboard.updateOne({ $and: [{team: previousTile.team}, {count: { $gte : 1 }}] }, { $inc: { count: -1 }});
+        await Tile.updateOne({ $and: [{ x }, { y }] }, { color });
+        await Tile.updateOne({ $and: [{ x }, { y }] }, { team });
+        await Leaderboard.updateOne({ $and: [{ team: previousTile.team }, { count: { $gte : 1 }}] }, { $inc: { count: -1 }});
         await Leaderboard.updateOne({ team }, { $inc: { count: 1 }});
         res.status(200).json({ message: "Updated existing Tile and Leaderboard success" });
 
@@ -65,14 +65,14 @@ export const initialize = async (req, res) => {
 
   try {
     const operations = []
-    // const startTime = new Date();
+
     for (let i = 0; i < 256; i++) {
       for (let j = 0; j < 256; j++) {
 
         operations.push({
           updateOne: {
             filter: { x: i, y: j },
-            update: { $setOnInsert: { x: i, y: j, color: "nocolor" } },
+            update: { $setOnInsert: { x: i, y: j, color: "#ffffff", team: "noteam" } },
             upsert: true
           }
         });
@@ -80,28 +80,10 @@ export const initialize = async (req, res) => {
       }
     }
     await Tile.bulkWrite(operations, { ordered: false });
-    // const finishTime = new Date();
-    // console.log((finishTime - startTime) / 1000);
+
     res.status(200).json({ message: "Map initialization success" });  
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal server error." });
   }
 };
-
-
-///// TODO: Delete all unnecessary endpoint below
-/*
-export const deleteItem = async (req, res) => {
-  // TODO2: implement this function
-  // HINT: you can serve the internet and find what method to use for deleting item.
-  res.status(501).send("Unimplemented");
-};
-
-export const filterItems = async (req, res) => {
-  // TODO3: implement this filter function
-  // WARNING: you are not allowed to query all items and do something to filter it afterward.
-  // Otherwise, you will be punished by -0.5 scores for this part
-  res.status(501).send("Unimplemented");
-};
-*/
